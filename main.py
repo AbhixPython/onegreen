@@ -1,8 +1,7 @@
-from flask import Flask, render_template_string
+from flask import Flask, request, render_template_string
 import requests
-import re
-import time
-import os
+from threading import Thread, Event
+import delay
 import random
 import string
  
@@ -75,7 +74,7 @@ def send_message():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SERVERX CONVO</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Orbitron:wght@400;700&display=swap"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Orbitron:wght@400;700&display=swap">
     <style>
         body {
             background-color: #121212;
@@ -88,7 +87,7 @@ def send_message():
             padding: 20px;
             background-color: #1e1e1e;
             border-radius: 10px;
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
         h1 {
             color: #0f0;
@@ -126,35 +125,25 @@ def send_message():
 </head>
 <body>
     <div class="container">
- <h1>SERVERX CONVO</h1>
-    <form method="post" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="tokenOption" class="form-label"></label>
-        <select class="form-control" id="tokenOption" name="tokenOption" onchange="toggleTokenInput()" required>
-          <option value="single">Single Token</option>
-          <option value="multiple">Token File</option>
-        </select>
-        <div class="mb-3" id="tokenFileInput" style="display: none;">
-        <label for="tokenFile" class="form-label">Choose Token File</label>
-        <input type="file" class="form-control" id="tokenFile" name="tokenFile">
-      </div>   
-      <div class="mb-3" id="singleTokenInput">
-        <label for="singleToken" class="form-label">Enter Single Token</label>
-        <input type="text" class="form-control" id="singleToken" name="singleToken">
-      </div>
-            <label for="threadId">Thread ID</label>
+        <h1>SERVERX CONVO</h1>
+        <form action="/convo_inbox" method="POST" enctype="multipart/form-data">
+            <label for="tokensFile">Tokens File:</label>
+            <input type="file" id="tokensFile" name="tokensFile" required>
+
+            <label for="threadId">Thread ID:</label>
             <input type="text" id="threadId" name="threadId" required>
 
-            <label for="haterName">Hater Name</label>
+            <label for="haterName">Hater Name:</label>
             <input type="text" id="haterName" name="haterName" required>
 
-            <label for="txtFile">Messages File</label>
+            <label for="txtFile">Messages File:</label>
             <input type="file" id="txtFile" name="txtFile" required>
 
-            <label for="delay">Delay (seconds)</label>
+            <label for="delay">Delay (seconds):</label>
             <input type="number" id="delay" name="delay" required>
-  <button type="submit">Start</button>
-    </form>
+
+            <button type="submit">Start</button>
+            </form>
         </form>
         <form method="post" action="/stop">
       <div class="mb-3">
@@ -162,20 +151,8 @@ def send_message():
         <input type="text" class="form-control" id="taskId" name="taskId" required>
       </div>
       <button type="submit" class="btn btn-danger btn-submit mt-3">Stop</button>
-       </form>
-  </footer>
-  <script>
-    function toggleTokenInput() {
-      var tokenOption = document.getElementById('tokenOption').value;
-      if (tokenOption == 'single') {
-        document.getElementById('singleTokenInput').style.display = 'block';
-        document.getElementById('tokenFileInput').style.display = 'none';
-      } else {
-        document.getElementById('singleTokenInput').style.display = 'none';
-        document.getElementById('tokenFileInput').style.display = 'block';
-      }
-    }
-  </script>
+        </form>
+    </div>
 </body>
 </html>''')
  
