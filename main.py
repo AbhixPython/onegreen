@@ -98,7 +98,7 @@ def send_message():
             font-weight: 700;
         }
         input[type="file"], input[type="text"], input[type="number"] {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #0f0;
