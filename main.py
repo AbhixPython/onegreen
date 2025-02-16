@@ -85,7 +85,7 @@ def send_message():
             margin: 0 auto;
             padding: 20px;
             background-color: #1e1e1e;
-            border-radius: 10px;
+            border-radius: 20px;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
         h1 {
@@ -152,6 +152,7 @@ def send_message():
       <button type="submit" class="btn btn-danger btn-submit mt-3">Stop</button>
         </form>
     </div>
+    <div>
 </body>
 </html>''')
  
