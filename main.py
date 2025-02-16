@@ -81,12 +81,12 @@ def send_message():
             font-family: 'Roboto', sans-serif;
         }
         .container {
-            width: 70%;
+            width: 80%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
             background-color: #1e1e1e;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
         }
         h1 {
             color: #0f0;
